@@ -77,4 +77,22 @@ export const eliminarReactivo = async (req,res) => {
     res.status(200).json(response);
 }
 
+export const generarExamen = async (req,res) => {
+    let consulta;
+    let numero;
+    try{
+        consulta = await models.reactivos.findAll()
+        numero = getRandomInt(consulta.length);
+    }catch(error){
+        console.log("Hubo un error: " + error)
+        res.status(500).json({"Error": "Hubo un error, "+ error})
+        return;
+    }
+
+    res.status(200).json(consulta[numero]);
+}
+
+const getRandomInt = (max) => {
+    return Math.floor(Math.random() * max)
+}
 
