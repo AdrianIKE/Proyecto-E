@@ -1,6 +1,6 @@
 import modelosInit from "../models/init-models.js"
 import {sequelize} from "../database/database.js"
-
+import { Op } from "sequelize";
 let models = modelosInit(sequelize);
 
 export const getReactivos = async (req,res) => {
@@ -123,6 +123,27 @@ export const generarExamen = async (req,res) => {
     }
 
     res.status(200).json(preguntas);
+}
+
+export const obtenerRespuesta = async (req,res) => {
+    let consulta;
+    let {noReactivo,respuesta} = req.params;
+    try{
+        consulta = await models.respuestas.findAll({
+            attributes: ['escorrecto'],
+            where:{
+                reactivo_id: noReactivo,
+                descripcion: {[Op.like]: `${respuesta}%`}
+            }
+        })
+ 
+    }catch(error){
+        console.log("Hubo un error: " + error)
+        res.status(500).json({"Error": "Hubo un error, "+ error})
+        return;
+    }
+
+    res.status(200).json(consulta);
 }
 
 const getRandomInt = (max) => {
