@@ -8,6 +8,6 @@ router.post('/api/createReactivo', createReactivo)
 router.put('/api/editarReactivo/:id',editarReactivo)
 router.delete('/api/eliminarReactivo/:id',eliminarReactivo)
 
-router.get('/api/generarExamen',generarExamen)
+router.get('/api/generarExamen/:preguntas',generarExamen)
 
 export default router

@@ -76,20 +76,53 @@ export const eliminarReactivo = async (req,res) => {
 
     res.status(200).json(response);
 }
-
+// 1 Generar el aleatorio
+// 2 Obtener las respuestas <-
+// 3 generar un objeto examen
+// 4 un numero de preguntas fijo (5,10,3)
 export const generarExamen = async (req,res) => {
     let consulta;
     let numero;
+    let numero_preguntas = req.params.preguntas;
+    let preguntas = []
     try{
-        consulta = await models.reactivos.findAll()
-        numero = getRandomInt(consulta.length);
+        consulta = await models.reactivos.findAll({
+            attributes: {exclude:['id_reactivo','area_id']},
+            include:{
+                model: models.respuestas,
+                as: "respuesta",
+                attributes: {exclude:['id_respuesta','reactivo_id']}
+            }
+        })
+
+        if(numero_preguntas > consulta.length){
+            console.log("No se cuentan con "+numero_preguntas+" preguntas, intenta con un numero menor")
+            res.status(500).json({"Error": `No se cuentan con ${numero_preguntas} preguntas, actualmente hay ${consulta.length} preguntas`})
+            return;  
+        }
+
+        
+
+        for (let i = 0; i < numero_preguntas ; i++) {
+            numero = 0;
+            numero = getRandomInt(consulta.length);
+            
+            if(typeof consulta[numero] === 'undefined' ){
+                i--;
+            }else{
+                preguntas.push(consulta[numero]);
+                delete(consulta[numero]) 
+            }
+            
+        }
+        
     }catch(error){
         console.log("Hubo un error: " + error)
         res.status(500).json({"Error": "Hubo un error, "+ error})
         return;
     }
 
-    res.status(200).json(consulta[numero]);
+    res.status(200).json(preguntas);
 }
 
 const getRandomInt = (max) => {
