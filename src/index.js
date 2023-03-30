@@ -1,3 +1,4 @@
+//Esta es la rama de Adrian Gutierrez
 import { sequelize } from "./database/database.js";
 import express from "express";
 import rutas from "./routes/reactivos.routes.js"
