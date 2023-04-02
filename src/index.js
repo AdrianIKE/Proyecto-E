@@ -1,7 +1,9 @@
 import { sequelize } from "./database/database.js";
 import express from "express";
-import rutas from "./routes/reactivos.routes.js"
+import reactivosRutas from "./routes/reactivos.routes.js"
 import examenRutas from "./routes/examen.routes.js"
+import areasRutas from "./routes/areas.routes.js"
+import usuariosRutas from "./routes/usuarios.routes.js"
 async function main(){
     try {
         await sequelize.sync({force:false})
@@ -16,8 +18,10 @@ async function main(){
 
     app.use(express.json())
     app.use(express.urlencoded({ extended:false}));
-    app.use(rutas)
+    app.use(reactivosRutas)
     app.use(examenRutas)
+    app.use(areasRutas)
+    app.use(usuariosRutas)
     app.listen(3000)
 
     console.log("El servidor escucha en puerto 3000")
