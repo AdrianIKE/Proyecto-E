@@ -23,7 +23,7 @@ export const getExamenes = async (req,res) => {
     res.status(200).json(response);
 }
 
-export const createExamenes = async (req,res) => {
+export const createExamen = async (req,res) => {
     let {noreactivos,aciertos,tiempo,usuario_id,area_id} = req.body;
     let response;
     let fecha_examen = new Date();
