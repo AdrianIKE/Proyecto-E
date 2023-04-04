@@ -1,5 +1,8 @@
 import { sequelize } from "./database/database.js";
 import express from "express";
+import rutas from "./routes/reactivos.routes.js"
+import examenRutas from "./models/examenes.js"
+import juanRutas from "./routes/juan.routes.js"
 
 async function main(){
     try {
@@ -15,6 +18,9 @@ async function main(){
 
     app.use(express.json())
     app.use(express.urlencoded({ extended:false}));
+    app.use(rutas)
+    app.use(examenRutas)
+    app.use(juanRutas)
     app.listen(3000)
 
     console.log("El servidor escucha en puerto 3000")
