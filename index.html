@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .pregunta{
+        background-color: rgba(21, 177, 177, 0.217);
+        font-size: 25px;
+    }
+    .respuesta{
+        background-color: rgba(173, 90, 218, 0.298);
+        font-size: 20px;
+    }
+    .respuesta:hover{
+        background-color: rgba(161, 52, 220, 0.298);
+        cursor: pointer;
+    }
+</style>
+<body>
+    <div id="cuerpo" class="cuerpo">
+
+    </div>
+    <script>
+        async function checar(element){
+            let noreactivo = element.getAttribute("reactivo");
+            let respuesta = element.firstElementChild.innerHTML[0];
+            swal.showLoading();
+            let res = await fetch(`http://localhost:3000/api/obtenerRespuesta/${noreactivo}/${respuesta}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                let correcto = data[0].escorrecto
+                                if(correcto){
+                                    Swal.fire({
+                                        title: 'Correcto!',
+                                        text: 'Respuesta Correcta!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Cool'
+                                      })
+                                }else{
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'Intentalo de nuevo!',
+                                        icon: 'error',
+                                        confirmButtonText: 'Ok'
+                                      })
+                                }
+                            })
+            
+        }
+        async function traeDatos(){
+            let cuerpo = document.getElementById("cuerpo");
+            
+            let res = await fetch("http://localhost:3000/api/generarExamen/7")
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach((reactivo) => {
+                        cuerpo.innerHTML += "<div class='pregunta'>"+reactivo.descripcion+"<br><br>"
+                        reactivo.respuesta.slice().reverse().forEach((respuesta)=>{
+                            cuerpo.innerHTML += "<div class='respuesta' onclick='checar(this)' reactivo="+reactivo.id_reactivo+"><p>"+respuesta.descripcion+"</p>"
+                        })
+                       
+                    })
+                })
+                
+        };
+        traeDatos();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>

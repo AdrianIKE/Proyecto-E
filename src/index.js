@@ -2,6 +2,7 @@ import { sequelize } from "./database/database.js";
 import express from "express";
 import rutas from "./routes/reactivos.routes.js"
 import examenRutas from "./routes/examen.routes.js"
+import cors from "cors"; //npm install cors
 async function main(){
     try {
         await sequelize.sync({force:false})
@@ -13,7 +14,10 @@ async function main(){
     }
 
     const app = express();
-
+    
+    app.use(cors({
+        origin: '*'
+    }));
     app.use(express.json())
     app.use(express.urlencoded({ extended:false}));
     app.use(rutas)

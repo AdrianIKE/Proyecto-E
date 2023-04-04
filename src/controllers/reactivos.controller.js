@@ -87,7 +87,7 @@ export const generarExamen = async (req,res) => {
     let preguntas = []
     try{
         consulta = await models.reactivos.findAll({
-            attributes: {exclude:['id_reactivo','area_id']},
+            attributes: {exclude:['area_id']},
             include:{
                 model: models.respuestas,
                 as: "respuesta",
